@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Special Page 😂</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: linear-gradient(135deg, #000, #222);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container { max-width: 400px; }
+button {
+  padding: 12px 25px;
+  margin-top: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 20px;
+  border: none;
+  background: #ff4081;
+  color: white;
+}
+input {
+  padding: 10px;
+  margin-top: 20px;
+  width: 80%;
+  border-radius: 10px;
+  border: none;
+}
+.hidden { display: none; }
+.cursor {
+  display: inline-block;
+  width: 2px;
+  background: white;
+  margin-left: 5px;
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0%,50%,100%{opacity:1;}25%,75%{opacity:0;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2 id="text"></h2>
+  <span class="cursor" id="cursor"></span>
+  <br>
+  <button id="startBtn">Start 😏</button>
+  <button id="nextBtn" class="hidden">OK 😌</button>
+  
+  <div id="step2" class="hidden">
+    <h2 id="step2Text"></h2>
+    <input type="text" id="nameInput" placeholder="Apna naam likho 😏">
+    <button id="submitName" class="hidden">Next 👉</button>
+  </div>
+
+  <div id="videoSection" class="hidden">
+    <h2 id="finalText"></h2>
+    <video id="video" width="100%" controls>
+      <source id="videoSource" src="" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<!-- Sounds -->
+<audio id="clickSound" src="https://www.myinstants.com/media/sounds/mouse-click.mp3"></audio>
+<audio id="typeSound" src="https://www.myinstants.com/media/sounds/keyboard-typing.mp3"></audio>
+
+<script>
+function playSound(el){ el.play().catch(()=>{}); }
+
+function typeText(element, text, speed = 40, callback) {
+  let i = 0;
+  element.innerHTML = "";
+  const typeAudio = document.getElementById("typeSound");
+
+  function typing() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      playSound(typeAudio);
+      i++;
+      setTimeout(typing, speed);
+    } else {
+      if (callback) callback();
+    }
+  }
+  typing();
+}
+
+// FIX: user interaction required
+startBtn.onclick = () => {
+  playSound(clickSound);
+  startBtn.style.display = "none";
+
+  typeText(
+    document.getElementById("text"),
+    "😏 Agai Maharani 👑 Lagta hai dusro ki crushes dekhne ka bohat shonk hai 😂",
+    40,
+    () => {
+      document.getElementById("nextBtn").classList.remove("hidden");
+    }
+  );
+};
+
+nextBtn.onclick = () => {
+  playSound(clickSound);
+  document.getElementById("text").style.display = "none";
+  document.getElementById("cursor").style.display = "none";
+  nextBtn.style.display = "none";
+  document.getElementById("step2").classList.remove("hidden");
+
+  typeText(
+    document.getElementById("step2Text"),
+    "😎 Madem ji pehle yaha apni entry kar wao 💅",
+    40
+  );
+};
+
+nameInput.oninput = () => {
+  if(nameInput.value.length > 0) {
+    submitName.classList.remove("hidden");
+  }
+};
+
+submitName.onclick = () => {
+  playSound(clickSound);
+  let name = nameInput.value;
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("videoSection").classList.remove("hidden");
+
+  typeText(
+    document.getElementById("finalText"),
+    `😂 ${name}, tum phas gaye ho! Enjoy karo 😎`,
+    40
+  );
+
+  // Show TikTok video
+  // Show uploaded video (keep file in same folder as HTML)
+  document.getElementById("videoSection").innerHTML += `
+    <video width="100%" controls autoplay>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+  `;
+};
+</script>
+</body>
+</html>
